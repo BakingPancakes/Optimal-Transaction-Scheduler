@@ -1,2 +1,2 @@
-# Simulated-Database-Concurrency-Scheduler
+Optimal transaction scheduler
 
