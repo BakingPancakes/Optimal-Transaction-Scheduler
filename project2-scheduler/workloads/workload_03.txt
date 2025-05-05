@@ -1,0 +1,12 @@
+# Time priority workload - large variation in arrival times
+# accountID targetID amount type fee arrivalTime complexity accountTier
+101 203 500.00 2 10.00 1714668400 3 0  # Very old (24+ hours)
+305 872 750.75 0 15.00 1714712400 3 0  # 12 hours old
+764 129 300.50 1 5.00 1714741200 2 0   # 4 hours old
+492 653 1200.00 2 25.00 1714752000 4 0 # 1 hour old
+218 946 125.25 0 2.50 1714756800 2 0   # 20 minutes old
+831 576 950.00 1 19.00 1714757400 4 0  # 10 minutes old
+403 299 425.75 0 8.50 1714757700 2 0   # 5 minutes old
+567 702 800.25 2 8.00 1714757880 3 0   # 2 minutes old
+614 258 275.50 1 2.75 1714757940 2 0   # 1 minute old
+939 475 1125.00 0 11.25 1714757990 3 0 # Just arrived

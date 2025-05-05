@@ -1,0 +1,12 @@
+# Complex mixed workload - competing priorities
+# accountID targetID amount type fee arrivalTime complexity accountTier
+101 203 500.00 2 50.00 1714668400 3 0  # High fee, very old
+305 872 750.75 0 15.00 1714757980 9 0  # Recent, but complex
+764 129 300.50 1 5.00 1714741200 1 5   # VIP account, simple, older
+492 653 1200.00 2 75.00 1714757990 7 1  # High fee, recent, moderately VIP, complex
+218 946 125.25 0 2.50 1714668800 2 4   # Low fee, old, high tier
+831 576 950.00 1 45.00 1714757400 8 0  # High fee, somewhat recent, complex
+403 299 425.75 0 8.50 1714757700 2 2   # Medium tier, recent, simple
+567 702 7500.25 2 35.00 1714757800 6 1  # Large transaction, medium complexity
+614 258 275.50 1 2.75 1714736000 1 3   # Simple, older, good tier
+939 475 1125.00 0 25.00 1714757990 5 2  # Recent, medium everything

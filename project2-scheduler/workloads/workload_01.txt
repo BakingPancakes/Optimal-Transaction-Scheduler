@@ -1,0 +1,7 @@
+# Simple workload - only a few transactions with similar priorities
+# accountID targetID amount type fee arrivalTime complexity accountTier
+101 203 500.00 2 10.00 1714758400 3 0
+305 872 750.75 0 15.00 1714755600 3 0
+764 129 300.50 1 5.00 1714757500 2 0
+492 653 1200.00 2 25.00 1714752000 4 0
+218 946 125.25 0 2.50 1714756800 2 0

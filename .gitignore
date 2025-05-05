@@ -1,0 +1,30 @@
+# Build directories
+/project2-scheduler/bin/
+/project2-scheduler/obj/
+
+# Object files, libraries, and executables
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Editor and OS specific files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# Compiled binary files
+scheduler
+test
+
+# Dependency directories
+/build/
+/Debug/
+/Release/
+
+# Backup files
+*.bak
