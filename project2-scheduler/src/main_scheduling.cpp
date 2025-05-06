@@ -102,8 +102,31 @@ int main(int argc, char* argv[]) {
         workload = argv[1];
     }
     
-    // Only process the Balanced Priority strategy
-    processWorkload(workload, {0.4, 0.3, 0.2, 0.1}, "Balanced Priority");
+    // Determine which strategy to use based on the workload
+    if (workload == "workloads/workload_01.txt") {
+        // For simple workload, use balanced strategy as baseline
+        processWorkload(workload, {0.4, 0.3, 0.2, 0.1}, "Balanced Priority");
+    }
+    else if (workload == "workloads/workload_02.txt") {
+        // For fee priority workload, use fee weights
+        processWorkload(workload, {1, 0, 0, 0}, "Fee Priority");
+    }
+    else if (workload == "workloads/workload_03.txt") {
+        // For time priority workload, use time weights
+        processWorkload(workload, {0, 1, 0, 0}, "Time Priority (FIFO)");
+    }
+    else if (workload == "workloads/workload_04.txt") {
+        // For account tier workload, use tier weights
+        processWorkload(workload, {0, 0, 0, 1}, "Account Tier Priority");
+    }
+    else if (workload == "workloads/workload_05.txt") {
+        // For complex mixed workload, use balanced weights
+        processWorkload(workload, {0.4, 0.3, 0.2, 0.1}, "Balanced Priority");
+    }
+    else {
+        // Default to balanced weights for any other workload
+        processWorkload(workload, {0.4, 0.3, 0.2, 0.1}, "Balanced Priority");
+    }
     
     return 0;
 }

@@ -91,6 +91,29 @@ I've implemented several strategies to test different priority approaches:
    - Weighted combination
    - My recommended approach
 
+## Test Cases
+
+For testing our transaction scheduler, I created five different workload files to evaluate how our priority algorithms perform in various scenarios:
+
+1. **Simple Workload (workload_01.txt)**
+   This basic workload contains just 5 transactions with similar characteristics (standard accounts, similar complexity, moderate fees). It serves as our baseline for initial testing and verification that the scheduler works correctly. This workload shouldn't show dramatic differences between strategies since the transactions don't vary much in their properties.
+
+2. **Fee Priority Workload (workload_02.txt)**
+   Contains 10 transactions with widely varying fees (from $1.25 to $100.00) but similar arrival times and complexity levels. This tests whether our fee prioritization actually processes high-fee transactions first, maximizing revenue. When running with fee priority weights `[1,0,0,0]`, we expect to see transactions processed in descending fee order (492, 831, 305, 939, etc.).
+
+3. **Time Priority Workload (workload_03.txt)**
+   Contains 10 transactions with arrival times spanning from 24+ hours ago to just now. This tests whether our system respects FIFO principles when using time priority weights `[0,1,0,0]` and whether our anti-starvation mechanisms work. We expect older transactions (101, 305, 764) to be processed before newer ones (614, 939).
+
+4. **Account Tier Workload (workload_04.txt)**
+   Contains 10 transactions with account tiers ranging from 0 (regular) to 5 (highest VIP). All transactions have identical arrival times to isolate the tier effect. When using account tier priority weights `[0,0,0,1]`, we expect to see VIP accounts (101, 305, 764) processed first, followed by standard accounts (831, 403, etc.).
+
+5. **Complex Mixed Workload (workload_05.txt)**
+   Our most sophisticated test case with 10 transactions having competing priorities: some are high-fee but complex, others are simple but low-fee, some are old VIP transactions vs. new high-fee ones, etc. This tests how our balanced strategy `[0.4,0.3,0.2,0.1]` handles real-world scenarios with trade-offs between different priority factors. We expect a processing order that's different from any single-factor strategy.
+
+The unit tests in `test.cpp` additionally verify two critical aspects of our scheduler:
+1. **Priority Ordering**: Tests that each individual priority factor (fee, time, complexity, account tier) correctly influences transaction ordering when that factor has 100% weight.
+2. **Fairness/Starvation Prevention**: Tests that very old transactions eventually get processed even when competing against many newer high-fee transactions, ensuring no transaction waits indefinitely.
+
 ## Workload Format
 
 Each line in the workload files represents one transaction:
@@ -107,5 +130,3 @@ Where:
 - `arrivalTime`: When the transaction arrived (Unix timestamp)
 - `complexity`: How complex/slow to process (1-10)
 - `accountTier`: Premium level (0=regular, 1-5=VIP)
-
-## Sample Work
