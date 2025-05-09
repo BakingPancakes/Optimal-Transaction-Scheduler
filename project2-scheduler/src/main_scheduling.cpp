@@ -31,9 +31,8 @@ vector<Transaction> loadWorkload(const string& filename) {
                >> t.fee >> t.arrivalTime >> t.complexity >> t.accountTier) {
             transactions.push_back(t);
         }
-            
-            return transactions;
     }
+    return transactions;
 }
 
 /**
