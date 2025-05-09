@@ -33,6 +33,7 @@ vector<Transaction> loadWorkload(const string& filename) {
         }
             
             return transactions;
+    }
 }
 
 /**
