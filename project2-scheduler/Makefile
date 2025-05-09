@@ -4,6 +4,7 @@ INCLUDES = -Iinclude
 
 # Directory structure
 SRCDIR = src
+TESTDIR = test
 OBJDIR = obj
 BINDIR = bin
 
@@ -13,8 +14,14 @@ SOURCES = $(SRCDIR)/scheduling.cpp $(SRCDIR)/main_scheduling.cpp $(SRCDIR)/accou
 # Object files
 OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
+# Test files
+TEST_SOURCES = $(TESTDIR)/test.cpp
+TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(OBJDIR)/%.o)
+TEST_DEPS = $(OBJDIR)/scheduling.o $(OBJDIR)/accounts.o
+
 # Executables
 MAIN = $(BINDIR)/scheduler
+TEST_EXEC = $(BINDIR)/test_scheduler
 
 # Default target
 all: directories $(MAIN)
@@ -27,13 +34,21 @@ directories:
 $(MAIN): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+# Build test program
+$(TEST_EXEC): $(TEST_OBJECTS) $(TEST_DEPS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 # Compile source files
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-# Compile test source files
-$(OBJDIR)/test.o: $(SRCDIR)/test.cpp
+# Compile test files
+$(OBJDIR)/%.o: $(TESTDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Test target
+test: $(TEST_EXEC)
+	./$(TEST_EXEC)
 
 # Run with different workloads
 run: $(MAIN)
@@ -68,4 +83,4 @@ run5: $(MAIN)
 clean:
 	rm -rf $(OBJDIR)/* $(BINDIR)/*
 
-.PHONY: all directories run run1 run2 run3 run4 run5 clean
+.PHONY: all directories run run1 run2 run3 run4 run5 clean test
