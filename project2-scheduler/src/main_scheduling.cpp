@@ -26,24 +26,13 @@ vector<Transaction> loadWorkload(const string& filename) {
             continue;  // Skip comments and empty lines
         }
 
-        char *linecpy = new char[line.length() + 1];
-        linecpy = strcpy(linecpy, line.c_str());
-
-        int accountID = atoi(strtok(linecpy, " "));
-        int targetID = atoi(strtok(NULL, " "));
-        double amount = atoi(strtok(NULL, " "));
-        int type = atoi(strtok(NULL, " "));
-        double fee = atoi(strtok(NULL, " "));
-        time_t arrivalTime = atoi(strtok(NULL, " "));
-        int complexity = atoi(strtok(NULL, " "));
-        int accountTier = atoi(strtok(NULL, " "));
-
-        t = {accountID, targetID, amount, type, fee, arrivalTime, complexity, accountTier};
-        
-        transactions.push_back(t);
-    }
-    
-    return transactions;
+        istringstream iss(line);
+        if (iss >> t.accountID >> t.targetID >> t.amount >> t.type 
+               >> t.fee >> t.arrivalTime >> t.complexity >> t.accountTier) {
+            transactions.push_back(t);
+        }
+            
+            return transactions;
 }
 
 /**
