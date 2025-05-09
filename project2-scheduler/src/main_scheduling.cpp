@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <sstream>
 
 using namespace std;
 
@@ -102,8 +103,8 @@ void processWorkload(const string& filename,
 int main(int argc, char* argv[]) {
     // Default to first workload if none specified
     string workload = "workloads/workload_01.txt";
-    if (argc != 1) {
-        cerr << "Error: Usage: ./main_scheduling.cpp [workload file path]" << endl;
+    if (argc != 2) {
+        cerr << "Error: Usage: make run[workload number]" << endl;
         return 1;
     }
     workload = argv[1];
