@@ -2,7 +2,24 @@
 #include <ctime>
 #include <algorithm>
 #include <numeric>
-#include <iostream> // Add this for logging
+#include <iostream>
+
+/**
+ * This file creates our class methods for our scheduling functionality.
+ * 
+ * === Overview: ===
+ *  Priority queue:
+ * - Transaction::getPriority(vector<weights>) -> calculate priority for given transaction (added here for codebase coherence)
+ * - Scheduler::add(Transaction)    -> add a transaction to the scheduling queue
+ * - Scheduler::next()              -> grab transaction with next highest priority
+ * - Scheduler::empty()             -> check if queue is empty
+ * - Scheduler::compare::operator() -> compare two transactions directly
+ * - Scheduler::setWeights(vector<newWeights>)        -> change weights (initialized in constructor) between tests
+ * 
+ *  For evaluation:
+ * - Scheduler::getProcessedCount() -> retrieve total processed transactions
+ * - Scheduler::getTotalFees()      -> retrieve total fees collected (revenue)
+ */
 
 // Priority score calculation algorithm
 double Transaction::getPriority(const std::vector<double>& weights) const {
@@ -13,27 +30,19 @@ double Transaction::getPriority(const std::vector<double>& weights) const {
     // Calculate scores for each factor (higher is better)
     double feeScore = fee;  // More money = higher priority
     double timeScore = waitTime;  // Waited longer = higher priority
-    double complexityScore = 1.0 / (complexity + 1.0);  // Flip so lower complexity = higher score
+    double complexityScore = 1.0 / (complexity + 1.0);  // Invert so lower complexity = higher score
     double tierScore = accountTier;  // Higher tier = higher priority
     
-    // Apply weights and add everything up
+    // Calculate priority according to input weights
     double priority = weights[0] * feeScore + 
                       weights[1] * timeScore + 
                       weights[2] * complexityScore + 
                       weights[3] * tierScore;
 
-    // Remove the debug logging here to clean up output
     return priority;
 }
 
-// Custom comparator for the priority queue
-bool Scheduler::Compare::operator()(const Transaction& a, const Transaction& b) const {
-    // Lower scores come out last from priority queue, so flip the comparison
-    // This was tricky to figure out!
-    return a.getPriority(weights) < b.getPriority(weights);
-}
-
-// Set up the scheduler with initial weights
+// Construct scheduler with initial weights
 Scheduler::Scheduler(std::vector<double> w) : 
     weights(w),
     queue(Compare(weights)),
@@ -57,13 +66,13 @@ void Scheduler::add(const Transaction& t) {
 // Get the next highest priority transaction
 Transaction Scheduler::next() {
     if (queue.empty()) {
-        throw std::runtime_error("Queue is empty - nothing to process!");
+        throw std::runtime_error("Queue is empty - nothing to process.");
     }
     
     Transaction t = queue.top();
     queue.pop();
     
-    // Update our stats
+    // Update stats
     processed++;
     totalFees += t.fee;
     
@@ -75,11 +84,19 @@ bool Scheduler::empty() const {
     return queue.empty();
 }
 
+
+// Custom comparator for the priority queue
+bool Scheduler::Compare::operator()(const Transaction& lhs, const Transaction& rhs) const {
+    // Lower scores come out last from priority queue, so flip the comparison
+    // This was tricky to figure out :/
+    return lhs.getPriority(weights) < rhs.getPriority(weights);
+}
+
 // Change how we prioritize transactions by updating weights
 void Scheduler::setWeights(const std::vector<double>& newWeights) {
     // Make sure we have exactly 4 weights
     if (newWeights.size() != 4) {
-        throw std::invalid_argument("Need exactly 4 weights (fee, time, complexity, tier)");
+        throw std::invalid_argument("Usage: please give exactly 4 weights {fee, time, complexity, tier}");
     }
     
     // Set and normalize weights
@@ -103,6 +120,8 @@ void Scheduler::setWeights(const std::vector<double>& newWeights) {
         queue.push(t);
     }
 }
+
+// Evaluation metrics:
 
 // Return how many transactions we've processed
 int Scheduler::getProcessedCount() const {
